@@ -20,14 +20,20 @@ let currentAudioIndex = 0;
 playerSource.src = musicFiles[currentAudioIndex];
 
 const particles = [];
-const numParticles = 4000;
+const numParticles = 3000; // Reduce number of particles for better mobile performance
 let animationStarted = false;
 let frame = 0;
 const durationRandomMotion = 500;
 const durationShapeFormation = 200;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// Set canvas dimensions based on viewport
+function setCanvasSize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+// Initialize canvas size on page load
+setCanvasSize();
 
 class Particle {
     constructor(x, y) {
@@ -163,7 +169,8 @@ function animate() {
     if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        birthdaySong.play().then(() => {
+        // Start the birthday song with user interaction
+        birthdaySong.addEventListener('ended', () => {
             const messages = [
                 { text: "SORRY", delay: 5000 },
                 { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
@@ -195,13 +202,15 @@ function animate() {
                     document.body.style.overflowY = 'scroll';
                     canvas.style.display = 'none';
                 }, 2000);
-            }, 65000);
-        }).catch(error => {
-            console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
+            }, 65000); // Adjust timing as needed
         });
-    }
 
-    requestAnimationFrame(animate);
+        // Display the canvas and start the animation
+        canvas.style.display = 'block';
+        animate();
+    } else {
+        requestAnimationFrame(animate);
+    }
 }
 
 function playMusic() {
@@ -251,6 +260,8 @@ function setVolume() {
     player.volume = volumeControl.value;
 }
 
+// Event listeners
+
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
     createParticles();
@@ -285,8 +296,11 @@ volumeControl.addEventListener('input', () => {
     setVolume();
 });
 
+// Resize canvas on window resize
 window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    setCanvasSize();
     createParticles();
 });
+
+// Initial setup
+playerSource.src = musicFiles[currentAudioIndex];
