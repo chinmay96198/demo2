@@ -1,114 +1,282 @@
-/* styles.css */
-
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-header {
-    background-color: #333;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2e2e2e;
     color: #fff;
-    text-align: center;
-    padding: 20px 0;
-}
-
-header h1 {
-    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
 }
 
 #particleCanvas {
-    display: block;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
-    background-color: black; /* Black background for particles */
+    width: 100%;
+    height: 100%;
+    transition: opacity 2s;
 }
 
 #startButton {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    z-index: 10;
     padding: 10px 20px;
-    font-size: 18px;
-    background-color: #333;
+    font-size: 20px;
+    background-color: #b22222;
     color: #fff;
     border: none;
     cursor: pointer;
-    z-index: 10;
+    border-radius: 5px;
 }
 
-.food-slider {
+#content {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-   
-    color: #333;
-    text-align: center;
-    overflow: hidden;
-    position: relative;
-    padding: 20px 0;
-}
-
-
-
-.food-slider .food-slider-container {
-    
-    overflow: hidden;
-    width: 100%;
-    height: 70vh;
-}
-
-.food-slider .food-slider-wrapper {
-    display: flex;
-    transition: transform 0.5s ease; /* Smooth transition */
-    margin-top: 20px;
-}
-
-.food-item {
-    flex: 0 0 auto;
-    width: 300px;
-    margin: 0 10px;
     padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.food-item img {
+    background: #111;
+    color: #fff;
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    max-width: 600px; /* Adjust max-width for responsiveness */
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 2s;
 }
 
-.food-info {
-    padding: 15px;
-}
-
-.food-info h2 {
-    margin: 10px 0 5px;
-    font-size: 1.5rem;
-    color: #c0392b;
-}
-
-.food-info p {
-    margin: 0;
-    font-size: 1rem;
-    color: #777;
+header, footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background: #222;
+    border-bottom: 2px solid #b22222;
 }
 
 footer {
-    background-color: #333;
-    color: #fff;
+    border-top: 2px solid #b22222;
+}
+
+section {
+    margin: 20px 0;
     text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
+}
+
+.player{
+    display: none;
+}
+
+.music-player {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+    margin: 0 auto; /* Center align on mobile */
+}
+
+.music-player audio {
     width: 100%;
+}
+
+.music-player .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.music-player .btn {
+    padding: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    transition: background 0.3s, transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+}
+
+.music-player .btn:hover {
+    background: #666;
+    transform: scale(1.1);
+}
+
+.music-player .progress-bar {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.music-player .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.music-player .volume-control input {
+    width: 80%;
+}
+
+.places-gallery, .food-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.places-gallery img, .food-gallery img {
+    width: calc(50% - 10px); /* Two images per row on mobile */
+    max-width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.places-gallery img:hover, .food-gallery img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrolling during animation */
+}
+
+#particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#content {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+#musicPlayer {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.player-controls button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+.player-controls button:hover {
+    transform: scale(1.1);
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+input[type="range"],
+progress {
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-thumb,
+progress {
+    background-color: #007bff;
+}
+
+input[type="range"]::-moz-range-thumb {
+    background-color: #007bff;
+}
+
+input[type="range"]::-webkit-slider-runnable-track,
+progress {
+    background-color: #ddd;
+}
+
+input[type="range"]::-moz-range-track {
+    background-color: #ddd;
+}
+
+input[type="range"]::-moz-focus-outer {
+    border: 0;
+}
+
+input[type="range"]::-ms-track {
+    background-color: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower,
+input[type="range"]::-ms-fill-upper {
+    background-color: #ddd;
+}
+
+input[type="range"]::-ms-thumb {
+    background-color: #007bff;
+}
+
+input[type="range"]::-ms-tooltip {
+    display: none;
 }

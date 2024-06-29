@@ -1,56 +1,58 @@
-// script.js
-
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
-const audio = document.getElementById('audio');
-const foodItems = document.getElementById('foodItems');
+const content = document.getElementById('content');
+const birthdaySong = document.getElementById('birthdaySong');
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const player = document.getElementById('player');
+const playerSource = document.getElementById('player-source');
+const progressBar = document.getElementById('progress');
+const volumeControl = document.getElementById('volume');
+
+const musicFiles = ["path/to/music1.mp3", "path/to/music2.mp3", "path/to/music3.mp3"];
+let currentAudioIndex = 0;
+
+playerSource.src = musicFiles[currentAudioIndex];
+
+const particles = [];
+const numParticles = 4000;
+let animationStarted = false;
+let frame = 0;
+const durationRandomMotion = 500; // Increased duration for random motion
+const durationShapeFormation = 200;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const numParticles = 1000;
-const particles = [];
-const durationRandomMotion = 100;
-const durationShapeFormation = 100;
-const imageUrl = 'path/to/your/image.jpg';
-let frame = 0;
-let animationStarted = false;
-let imageLoaded = false;
-let phase = 0;  // 0: initial, 1: first message, 2: second message
-
-const image = new Image();
-image.src = imageUrl;
-
-image.onload = () => {
-    imageLoaded = true;
-    console.log('Image loaded');
-};
-
 class Particle {
-    constructor(x, y, color) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.vx = (Math.random() - 0.5) * 5;
-        this.vy = (Math.random() - 0.5) * 5;
-        this.tx = x;
-        this.ty = y;
-        this.color = color || 'white';
+        this.tx = Math.random() * canvas.width;
+        this.ty = Math.random() * canvas.height;
+        this.vx = Math.random() * 2 - 1; // Random velocity for random motion
+        this.vy = Math.random() * 2 - 1; // Random velocity for random motion
+        this.color = getGradientColor(x, y);
     }
+
     update() {
         if (frame < durationRandomMotion) {
+            // Random motion phase
             this.x += this.vx;
             this.y += this.vy;
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
         } else {
+            // Smooth movement towards target
             this.x += (this.tx - this.x) * 0.05;
             this.y += (this.ty - this.y) * 0.05;
         }
     }
+
     draw() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, 2, 2);
+        ctx.fillRect(this.x, this.y, 2, 2); // Adjusted particle size
     }
 }
 
@@ -58,6 +60,18 @@ function createParticles() {
     for (let i = 0; i < numParticles; i++) {
         particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
     }
+}
+
+function getGradientColor(x, y) {
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop("0.0", "red");
+    gradient.addColorStop("0.5", "orange");
+    gradient.addColorStop("0.8", "yellow");
+    gradient.addColorStop("1.0", "green");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, 1, 1);
+    const data = ctx.getImageData(x, y, 1, 1).data;
+    return `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
 }
 
 function getCakeAndTextPositions() {
@@ -69,33 +83,31 @@ function getCakeAndTextPositions() {
     const candleWidth = 10;
     const candleHeight = 50;
 
-    // Base of the cake (rectangle)
-    for (let x = centerX - cakeWidth / 2; x <= centerX + cakeWidth / 2; x += 6) {
-        for (let y = centerY - cakeHeight / 2; y <= centerY + cakeHeight / 2; y += 6) {
-            positions.push({x: x, y: y, color: 'pink'});
+    for (let x = centerX - cakeWidth / 2; x <= centerX + cakeWidth / 2; x += 4) {
+        for (let y = centerY - cakeHeight / 2; y <= centerY + cakeHeight / 2; y += 4) {
+            positions.push({ x: x, y: y, color: getGradientColor(x, y) });
         }
     }
 
-    // Candle (rectangle)
     for (let x = centerX - candleWidth / 2; x <= centerX + candleWidth / 2; x += 4) {
         for (let y = centerY - cakeHeight / 2 - candleHeight; y <= centerY - cakeHeight / 2; y += 4) {
-            positions.push({x: x, y: y, color: 'red'});
+            positions.push({ x: x, y: y, color: getGradientColor(x, y) });
         }
     }
 
-    // "Happy Birthday" text
     ctx.font = 'bold 40px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText("Happy Birthday", centerX, centerY - cakeHeight - 60);
+    ctx.fillStyle = 'white';
+    ctx.fillText("Happy 25th Birthday Melis", centerX, centerY - cakeHeight - 60);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    
-    for (let y = 0; y < canvas.height; y += 6) {
-        for (let x = 0; x < canvas.width; x += 6) {
+
+    for (let y = 0; y < canvas.height; y += 4) {
+        for (let x = 0; x < canvas.width; x += 4) {
             const index = (y * canvas.width + x) * 4;
-            if (data[index + 3] > 128) {  // Check the alpha value
-                positions.push({x: x, y: y, color: 'white'});
+            if (data[index + 3] > 128) {
+                positions.push({ x: x, y: y, color: getGradientColor(x, y) });
             }
         }
     }
@@ -105,22 +117,19 @@ function getCakeAndTextPositions() {
 
 function getMessagePositions(message) {
     const positions = [];
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.font = 'bold 40px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(message, centerX, centerY);
+    ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-    for (let y = 0; y < canvas.height; y += 6) {
-        for (let x = 0; x < canvas.width; x += 6) {
+    for (let y = 0; y < canvas.height; y += 3) { // Decreased spacing for thicker text
+        for (let x = 0; x < canvas.width; x += 3) { // Decreased spacing for thicker text
             const index = (y * canvas.width + x) * 4;
-            if (data[index + 3] > 128) {  // Check the alpha value
-                positions.push({x: x, y: y, color: 'white'});
+            if (data[index + 3] > 128) {
+                positions.push({ x: x, y: y, color: getGradientColor(x, y) });
             }
         }
     }
@@ -137,136 +146,162 @@ function assignTargetPositions(positions) {
     }
 }
 
-// Fireworks effect
-class Firework {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.sparks = [];
-        for (let i = 0; i < 100; i++) {
-            this.sparks.push({
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 10,
-                vy: (Math.random() - 0.5) * 10,
-                alpha: 1,
-                color: `hsl(${Math.random() * 360}, 100%, 50%)`
-            });
-        }
-    }
-    update() {
-        this.sparks.forEach(spark => {
-            spark.vx *= 0.95;
-            spark.vy *= 0.95;
-            spark.alpha -= 0.02;
-            spark.x += spark.vx;
-            spark.y += spark.vy;
-        });
-        this.sparks = this.sparks.filter(spark => spark.alpha > 0);
-    }
-    draw() {
-        this.sparks.forEach(spark => {
-            ctx.fillStyle = `rgba(${parseInt(spark.color.slice(4, spark.color.indexOf(',')))},${parseInt(spark.color.slice(spark.color.indexOf(',') + 1, spark.color.lastIndexOf(',')))},${parseInt(spark.color.slice(spark.color.lastIndexOf(',') + 1, spark.color.indexOf(')')))},${spark.alpha})`;
-            ctx.beginPath();
-            ctx.arc(spark.x, spark.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-        });
-    }
-}
-
-const fireworks = [];
-
-function createFireworks() {
-    for (let i = 0; i < 10; i++) {
-        fireworks.push(new Firework(Math.random() * canvas.width, Math.random() * canvas.height));
-    }
-}
-
 function animate() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     particles.forEach(p => {
         p.update();
         p.draw();
     });
-    
-    if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
-        if (imageLoaded) {
-            ctx.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.height / 2);
-            console.log('Image drawn');
-        }
-        if (!audio.playing) {
-            audio.play();
-            audio.playing = true;
-            console.log('Audio playing');
-        }
 
+    if (frame === durationRandomMotion) {
+        const initialPositions = getCakeAndTextPositions();
+        assignTargetPositions(initialPositions);
+    }
+
+    if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        setTimeout(() => {
-            const firstMessagePositions = getMessagePositions("Have a Great Day!");
-            assignTargetPositions(firstMessagePositions);
-            phase = 1;
-            createFireworks();
-        }, 5000); // 5 seconds delay before displaying the first message
+        // Play the birthday song
+        playBirthdaySong();
 
-        setTimeout(() => {
-            const secondMessagePositions = getMessagePositions("Enjoy Your Special Day!");
-            assignTargetPositions(secondMessagePositions);
-            phase = 2;
-        }, 10000); // Additional 5 seconds delay before displaying the second message (10 seconds total)
+        // Define the messages and their timings
+        const messages = [
+            { text: "SORRY", delay: 5000 },
+            { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
+            
+            { text: "ON YOUR SPECIAL DAY", delay: 15000 },
+            { text: "BUT", delay: 20000 },
+            { text: "I WILL TRY", delay: 25000 },
+            { text: "TO PUT A SMILE", delay: 30000 },
+            { text: "ON YOUR FACE", delay: 35000 },
+            { text: "BY BRINGING ALL THE", delay: 40000 },
+            { text: "THINGS YOU LIKE", delay: 45000 },
+            { text: "AT ONE PLACE", delay: 50000 },
+            { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
+        ];
 
-        setTimeout(() => {
-            canvas.style.display = 'none';
-            foodItems.style.display = 'flex';
-            startFoodSlider();
-        }, 15000); // Additional 5 seconds delay before showing the food items (15 seconds total)
-    }
-
-    // Draw and update fireworks
-    if (phase === 1) {
-        fireworks.forEach(firework => {
-            firework.update();
-            firework.draw();
+        // Display each message at the defined times
+        messages.forEach(({ text, delay }) => {
+            setTimeout(() => {
+                const positions = getMessagePositions(text);
+                assignTargetPositions(positions);
+            }, delay);
         });
+
+        // Smooth transition from canvas to content
+        setTimeout(() => {
+            canvas.style.transition = 'opacity 2s';
+            content.style.transition = 'opacity 2s';
+            canvas.style.opacity = 0;
+            content.style.display = 'flex';
+            setTimeout(() => {
+                content.style.opacity = 1;
+                document.body.style.overflowY = 'scroll';
+                canvas.style.display = 'none';
+            }, 2000);
+        }, 65000); // Adjust this timing as needed
     }
-    
+
     requestAnimationFrame(animate);
 }
 
-function startFoodSlider() {
-    foodItems.style.display = 'flex';
-
-    // Auto slide every 5 seconds
-    setInterval(() => {
-        slideToNext();
-    }, 5000);
-}
-
-const foodSliderWrapper = document.querySelector('.food-slider-wrapper');
-const foodItemsList = document.querySelectorAll('.food-item');
-let currentSlide = 0;
-const slideWidth = foodItemsList[0].clientWidth;
-
-function slideToNext() {
-    currentSlide++;
-    if (currentSlide >= foodItemsList.length) {
-        currentSlide = 0;
-    }
-    updateSliderPosition();
-}
-
-function updateSliderPosition() {
-    const translateValue = -currentSlide * slideWidth;
-    foodSliderWrapper.style.transform = `translateX(${translateValue}px)`;
+function playBirthdaySong() {
+    birthdaySong.play()
+        .then(() => {
+            console.log('Birthday song started playing.');
+        })
+        .catch(error => {
+            console.error('Failed to play birthday song:', error);
+        });
 }
 
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
     createParticles();
-    const initialPositions = getCakeAndTextPositions();
-    assignTargetPositions(initialPositions);
     animate();
-    audio.playing = false;  // Reset playing status
 });
+
+// Ensure the birthday song is loaded before starting the animation
+birthdaySong.addEventListener('canplaythrough', () => {
+    console.log('Birthday song is ready to play.');
+});
+
+// Start the animation
+playBtn.addEventListener('click', () => {
+    playMusic();
+});
+
+pauseBtn.addEventListener('click', () => {
+    pauseMusic();
+});
+
+nextBtn.addEventListener('click', () => {
+    nextMusic();
+});
+
+prevBtn.addEventListener('click', () => {
+    prevMusic();
+});
+
+// Other audio player controls
+player.addEventListener('timeupdate', () => {
+    updateProgressBar();
+});
+
+progressBar.addEventListener('input', () => {
+    setProgress();
+});
+
+volumeControl.addEventListener('input', () => {
+    setVolume();
+});
+
+// Function definitions for audio control
+function playMusic() {
+    player.play();
+    playBtn.style.display = 'none';
+    pauseBtn.style.display = 'block';
+}
+
+function pauseMusic() {
+    player.pause();
+    playBtn.style.display = 'block';
+    pauseBtn.style.display = 'none';
+}
+
+function stopMusic() {
+    player.pause();
+    player.currentTime = 0;
+}
+
+function nextMusic() {
+    stopMusic();
+    currentAudioIndex = (currentAudioIndex + 1) % musicFiles.length;
+    playerSource.src = musicFiles[currentAudioIndex];
+    player.load();
+    playMusic();
+}
+
+function prevMusic() {
+    stopMusic();
+    currentAudioIndex = (currentAudioIndex - 1 + musicFiles.length) % musicFiles.length;
+    playerSource.src = musicFiles[currentAudioIndex];
+    player.load();
+    playMusic();
+}
+
+function updateProgressBar() {
+    const progress = (player.currentTime / player.duration) * 100;
+    progressBar.value = progress;
+}
+
+function setProgress() {
+    const newTime = (progressBar.value / 100) * player.duration;
+    player.currentTime = newTime;
+}
+
+function setVolume() {
+    player.volume = volumeControl.value;
+}
