@@ -105,14 +105,9 @@ function getCakeAndTextPositions() {
 
 function getMessagePositions(message) {
     const positions = [];
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'bold 40px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(message, centerX, centerY);
+    ctx.fillStyle = 'white';
+    ctx.fillText(message, canvas.width / 2, canvas.height / 2);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
@@ -205,7 +200,7 @@ function animate() {
         animationStarted = true;
 
         setTimeout(() => {
-            const firstMessagePositions = getMessagePositions("Have a Great Day!");
+            const firstMessagePositions = getMessagePositions("Happy Birthday!");
             assignTargetPositions(firstMessagePositions);
             phase = 1;
             createFireworks();
