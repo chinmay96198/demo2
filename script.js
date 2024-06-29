@@ -1,5 +1,3 @@
-// JavaScript code
-
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -14,11 +12,7 @@ const playerSource = document.getElementById('player-source');
 const progressBar = document.getElementById('progress');
 const volumeControl = document.getElementById('volume');
 
-const musicFiles = [
-    "path/to/music1.mp3", 
-    "path/to/music2.mp3", 
-    "path/to/music3.mp3"
-];
+const musicFiles = ["path/to/music1.mp3", "path/to/music2.mp3", "path/to/music3.mp3"];
 let currentAudioIndex = 0;
 
 playerSource.src = musicFiles[currentAudioIndex];
@@ -75,7 +69,7 @@ function getGradientColor(x, y) {
     ctx.fillStyle = gradient;
     ctx.fillRect(x, y, 1, 1);
     const data = ctx.getImageData(x, y, 1, 1).data;
-    return `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
+    return 'rgb(${data[0]}, ${data[1]}, ${data[2]})';
 }
 
 function getCakeAndTextPositions() {
@@ -256,6 +250,12 @@ function setVolume() {
     player.volume = volumeControl.value;
 }
 
+startButton.addEventListener('click', () => {
+    startButton.style.display = 'none';
+    createParticles();
+    animate();
+});
+
 playBtn.addEventListener('click', () => {
     playMusic();
 });
@@ -284,8 +284,9 @@ volumeControl.addEventListener('input', () => {
     setVolume();
 });
 
-startButton.addEventListener('click', () => {
-    startButton.style.display = 'none';
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     createParticles();
     animate();
 });

@@ -12,8 +12,8 @@
     </div>
     <button id="startButton">Start</button>
 
-    <audio id="birthdaySong" muted>
-        <source src="./happy-birthday-to-you-piano-version-13976.mp3" type="audio/mpeg">
+    <audio id="birthdaySong">
+        <source src="./music/happy-birthday-to-you-piano-version-13976.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -69,23 +69,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        const startButton = document.getElementById('startButton');
-        const birthdaySong = document.getElementById('birthdaySong');
-
-        startButton.addEventListener('click', () => {
-            startButton.style.display = 'none';
-            createParticles();
-            animate();
-            playBirthdaySong(); // Trigger play function after user interaction
-        });
-
-        function playBirthdaySong() {
-            birthdaySong.muted = false; // Unmute the audio
-            birthdaySong.play().catch(error => {
-                console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
-            });
-        }
-    </script>
 </body>
 </html>
