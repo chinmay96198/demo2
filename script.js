@@ -20,7 +20,7 @@ let currentAudioIndex = 0;
 playerSource.src = musicFiles[currentAudioIndex];
 
 const particles = [];
-const numParticles = 3000; // Reduce number of particles for better mobile performance
+const numParticles = 2000; // Reduce number of particles for better mobile performance
 let animationStarted = false;
 let frame = 0;
 const durationRandomMotion = 500;
@@ -205,12 +205,10 @@ function animate() {
             }, 65000); // Adjust timing as needed
         });
 
-        // Display the canvas and start the animation
-        canvas.style.display = 'block';
-        animate();
-    } else {
-        requestAnimationFrame(animate);
+        birthdaySong.play(); // Start playing the birthday song
     }
+
+    requestAnimationFrame(animate);
 }
 
 function playMusic() {
