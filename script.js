@@ -14,26 +14,24 @@ const playerSource = document.getElementById('player-source');
 const progressBar = document.getElementById('progress');
 const volumeControl = document.getElementById('volume');
 
-const musicFiles = ["path/to/music1.mp3", "path/to/music2.mp3", "path/to/music3.mp3"];
+const musicFiles = [
+    "path/to/music1.mp3", 
+    "path/to/music2.mp3", 
+    "path/to/music3.mp3"
+];
 let currentAudioIndex = 0;
 
 playerSource.src = musicFiles[currentAudioIndex];
 
 const particles = [];
-const numParticles = 2000; // Reduce number of particles for better mobile performance
+const numParticles = 4000;
 let animationStarted = false;
 let frame = 0;
 const durationRandomMotion = 500;
 const durationShapeFormation = 200;
 
-// Set canvas dimensions based on viewport
-function setCanvasSize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-// Initialize canvas size on page load
-setCanvasSize();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 class Particle {
     constructor(x, y) {
@@ -166,11 +164,11 @@ function animate() {
         assignTargetPositions(initialPositions);
     }
 
+    // Check if animation duration is over
     if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        // Start the birthday song with user interaction
-        birthdaySong.addEventListener('ended', () => {
+        birthdaySong.play().then(() => {
             const messages = [
                 { text: "SORRY", delay: 5000 },
                 { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
@@ -202,10 +200,10 @@ function animate() {
                     document.body.style.overflowY = 'scroll';
                     canvas.style.display = 'none';
                 }, 2000);
-            }, 65000); // Adjust timing as needed
+            }, 65000);
+        }).catch(error => {
+            console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
         });
-
-        birthdaySong.play(); // Start playing the birthday song
     }
 
     requestAnimationFrame(animate);
@@ -258,14 +256,6 @@ function setVolume() {
     player.volume = volumeControl.value;
 }
 
-// Event listeners
-
-startButton.addEventListener('click', () => {
-    startButton.style.display = 'none';
-    createParticles();
-    animate();
-});
-
 playBtn.addEventListener('click', () => {
     playMusic();
 });
@@ -294,11 +284,8 @@ volumeControl.addEventListener('input', () => {
     setVolume();
 });
 
-// Resize canvas on window resize
-window.addEventListener('resize', () => {
-    setCanvasSize();
+startButton.addEventListener('click', () => {
+    startButton.style.display = 'none';
     createParticles();
+    animate();
 });
-
-// Initial setup
-playerSource.src = musicFiles[currentAudioIndex];

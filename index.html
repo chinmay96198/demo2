@@ -3,55 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Celebration</title>
+    <title>Personal Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas>
+    <div id="particleCanvasContainer">
+        <canvas id="particleCanvas"></canvas>
+    </div>
+    <button id="startButton">Start</button>
+
+    <audio id="birthdaySong" muted>
+        <source src="./happy-birthday-to-you-piano-version-13976.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div id="content">
         <header>
-            <h1>Birthday Celebration</h1>
+            <h1>HAPPY BIRTHDAY MELIS</h1>
         </header>
-        <main>
-            <section>
-                <div class="music-player">
-                    <audio id="player" controls>
-                        <source id="player-source" src="./music/happy-birthday-to-you-piano-version-13976.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    
-                    <input id="progress" class="progress-bar" type="range" min="0" max="100" step="0.01">
-                    <div class="volume-control">
-                        <label for="volume">Volume:</label>
-                        <input id="volume" type="range" min="0" max="1" step="0.01" value="1">
-                    </div>
+        
+        <section id="music">
+            <h2>Your Favorite Music</h2>
+            <div class="music-player">
+                <audio id="player">
+                    <source id="player-source" src="" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="controls">
+                    <button id="prevBtn" class="btn">&#9664;&#9664;</button>
+                    <button id="playBtn" class="btn">&#9654;</button>
+                    <button id="pauseBtn" class="btn" style="display: none;">&#10074;&#10074;</button>
+                    <button id="nextBtn" class="btn">&#9654;&#9654;</button>
                 </div>
-            </section>
-            <section>
-                <h2>Places You Like</h2>
-                <div class="places-gallery">
-                    <img src="path/to/place1.jpg" alt="Place 1">
-                    <img src="path/to/place2.jpg" alt="Place 2">
-                    <img src="path/to/place3.jpg" alt="Place 3">
-                    <!-- Add more images as needed -->
+                <div class="progress-bar">
+                    <input type="range" id="progress" value="0" max="100">
                 </div>
-            </section>
-            <section>
-                <h2>Foods You Love</h2>
-                <div class="food-gallery">
-                    <img src="path/to/food1.jpg" alt="Food 1">
-                    <img src="path/to/food2.jpg" alt="Food 2">
-                    <img src="path/to/food3.jpg" alt="Food 3">
-                    <!-- Add more images as needed -->
+                <div class="volume-control">
+                    <label for="volume">Volume:</label>
+                    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
+
+        <section id="places">
+            <h2>Your Favorite Places</h2>
+            <div class="places-gallery">
+                <img src="./dubai.webp" alt="Place 1" class="place-image">
+                <img src="./prague.avif" alt="Place 2" class="place-image">
+                <img src="./rome.webp" alt="Place 3" class="place-image">
+            </div>
+        </section>
+
+        <section id="food">
+            <h2>Your Favorite Food</h2>
+            <div class="food-gallery">
+                <img src="./hamburger.jpg" alt="Food 1" class="food-image">
+                <img src="./souffle.jpg" alt="Food 2" class="food-image">
+                <img src="./download.jpg" alt="Food 3" class="food-image">
+            </div>
+        </section>
+
         <footer>
-            <p>&copy; 2024 Your Name</p>
+            <p>&copy; 2024 My Special Page</p>
         </footer>
     </div>
-    <button id="startButton">Start Celebration</button>
-    <audio id="birthdaySong" src="./music/happy-birthday-to-you-piano-version-13976.mp3"></audio>
+
     <script src="script.js"></script>
+    <script>
+        const startButton = document.getElementById('startButton');
+        const birthdaySong = document.getElementById('birthdaySong');
+
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            createParticles();
+            animate();
+            playBirthdaySong(); // Trigger play function after user interaction
+        });
+
+        function playBirthdaySong() {
+            birthdaySong.muted = false; // Unmute the audio
+            birthdaySong.play().catch(error => {
+                console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
+            });
+        }
+    </script>
 </body>
 </html>
