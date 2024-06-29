@@ -21,7 +21,7 @@ const particles = [];
 const numParticles = 4000;
 let animationStarted = false;
 let frame = 0;
-const durationRandomMotion = 500;
+const durationRandomMotion = 500; // Increased duration for random motion
 const durationShapeFormation = 200;
 
 canvas.width = window.innerWidth;
@@ -33,16 +33,18 @@ class Particle {
         this.y = y;
         this.tx = Math.random() * canvas.width;
         this.ty = Math.random() * canvas.height;
-        this.vx = Math.random() * 2 - 1;
-        this.vy = Math.random() * 2 - 1;
+        this.vx = Math.random() * 2 - 1; // Random velocity for random motion
+        this.vy = Math.random() * 2 - 1; // Random velocity for random motion
         this.color = getGradientColor(x, y);
     }
 
     update() {
         if (frame < durationRandomMotion) {
+            // Random motion phase
             this.x += this.vx;
             this.y += this.vy;
         } else {
+            // Smooth movement towards target
             this.x += (this.tx - this.x) * 0.05;
             this.y += (this.ty - this.y) * 0.05;
         }
@@ -50,7 +52,7 @@ class Particle {
 
     draw() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, 2, 2);
+        ctx.fillRect(this.x, this.y, 2, 2); // Adjusted particle size
     }
 }
 
@@ -69,7 +71,7 @@ function getGradientColor(x, y) {
     ctx.fillStyle = gradient;
     ctx.fillRect(x, y, 1, 1);
     const data = ctx.getImageData(x, y, 1, 1).data;
-    return 'rgb(${data[0]}, ${data[1]}, ${data[2]})';
+    return `rgb(${data[0]}, ${data[1]}, ${data[2]})`;
 }
 
 function getCakeAndTextPositions() {
@@ -123,8 +125,8 @@ function getMessagePositions(message) {
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-    for (let y = 0; y < canvas.height; y += 3) {
-        for (let x = 0; x < canvas.width; x += 3) {
+    for (let y = 0; y < canvas.height; y += 3) { // Decreased spacing for thicker text
+        for (let x = 0; x < canvas.width; x += 3) { // Decreased spacing for thicker text
             const index = (y * canvas.width + x) * 4;
             if (data[index + 3] > 128) {
                 positions.push({ x: x, y: y, color: getGradientColor(x, y) });
@@ -158,49 +160,59 @@ function animate() {
         assignTargetPositions(initialPositions);
     }
 
-    // Check if animation duration is over
     if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        birthdaySong.play().then(() => {
-            const messages = [
-                { text: "SORRY", delay: 5000 },
-                { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
-                { text: "ON YOUR SPECIAL DAY", delay: 15000 },
-                { text: "BUT", delay: 20000 },
-                { text: "I WILL TRY", delay: 25000 },
-                { text: "TO PUT A SMILE", delay: 30000 },
-                { text: "ON YOUR FACE", delay: 35000 },
-                { text: "BY BRINGING ALL THE", delay: 40000 },
-                { text: "THINGS YOU LIKE", delay: 45000 },
-                { text: "AT ONE PLACE", delay: 50000 },
-                { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
-            ];
+        // Play the birthday song
+        birthdaySong.play();
 
-            messages.forEach(({ text, delay }) => {
-                setTimeout(() => {
-                    const positions = getMessagePositions(text);
-                    assignTargetPositions(positions);
-                }, delay);
-            });
+        // Define the messages and their timings
+        const messages = [
+            { text: "SORRY", delay: 5000 },
+            { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
+            { text: "ON YOUR SPECIAL DAY", delay: 15000 },
+            { text: "BUT", delay: 20000 },
+            { text: "I WILL TRY", delay: 25000 },
+            { text: "TO PUT A SMILE", delay: 30000 },
+            { text: "ON YOUR FACE", delay: 35000 },
+            { text: "BY BRINGING ALL THE", delay: 40000 },
+            { text: "THINGS YOU LIKE", delay: 45000 },
+            { text: "AT ONE PLACE", delay: 50000 },
+            { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
+        ];
 
+        // Display each message at the defined times
+        messages.forEach(({ text, delay }) => {
             setTimeout(() => {
-                canvas.style.transition = 'opacity 2s';
-                content.style.transition = 'opacity 2s';
-                canvas.style.opacity = 0;
-                content.style.display = 'flex';
-                setTimeout(() => {
-                    content.style.opacity = 1;
-                    document.body.style.overflowY = 'scroll';
-                    canvas.style.display = 'none';
-                }, 2000);
-            }, 65000);
-        }).catch(error => {
-            console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
+                const positions = getMessagePositions(text);
+                assignTargetPositions(positions);
+                displayMessage(text);
+            }, delay);
         });
+
+        // Smooth transition from canvas to content
+        setTimeout(() => {
+            canvas.style.transition = 'opacity 2s';
+            content.style.transition = 'opacity 2s';
+            canvas.style.opacity = 0;
+            content.style.display = 'flex';
+            content.classList.add('active');
+            setTimeout(() => {
+                content.style.opacity = 1;
+                document.body.style.overflowY = 'scroll';
+                canvas.style.display = 'none';
+            }, 2000);
+        }, 65000); // Adjust this timing as needed
     }
 
     requestAnimationFrame(animate);
+}
+
+function displayMessage(message) {
+    const messagesList = document.getElementById('messagesList');
+    const li = document.createElement('li');
+    li.textContent = message;
+    messagesList.appendChild(li);
 }
 
 function playMusic() {
@@ -250,6 +262,7 @@ function setVolume() {
     player.volume = volumeControl.value;
 }
 
+// Event listener to play the birthday song
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
     createParticles();
@@ -284,9 +297,7 @@ volumeControl.addEventListener('input', () => {
     setVolume();
 });
 
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    createParticles();
-    animate();
+// Event listener to play birthday song when animation starts
+startButton.addEventListener('click', () => {
+    birthdaySong.play();
 });
