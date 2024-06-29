@@ -1,3 +1,5 @@
+// JavaScript code
+
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -21,7 +23,7 @@ const particles = [];
 const numParticles = 4000;
 let animationStarted = false;
 let frame = 0;
-const durationRandomMotion = 500; // Increased duration for random motion
+const durationRandomMotion = 500;
 const durationShapeFormation = 200;
 
 canvas.width = window.innerWidth;
@@ -33,18 +35,16 @@ class Particle {
         this.y = y;
         this.tx = Math.random() * canvas.width;
         this.ty = Math.random() * canvas.height;
-        this.vx = Math.random() * 2 - 1; // Random velocity for random motion
-        this.vy = Math.random() * 2 - 1; // Random velocity for random motion
+        this.vx = Math.random() * 2 - 1;
+        this.vy = Math.random() * 2 - 1;
         this.color = getGradientColor(x, y);
     }
 
     update() {
         if (frame < durationRandomMotion) {
-            // Random motion phase
             this.x += this.vx;
             this.y += this.vy;
         } else {
-            // Smooth movement towards target
             this.x += (this.tx - this.x) * 0.05;
             this.y += (this.ty - this.y) * 0.05;
         }
@@ -52,7 +52,7 @@ class Particle {
 
     draw() {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, 2, 2); // Adjusted particle size
+        ctx.fillRect(this.x, this.y, 2, 2);
     }
 }
 
@@ -125,8 +125,8 @@ function getMessagePositions(message) {
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-    for (let y = 0; y < canvas.height; y += 3) { // Decreased spacing for thicker text
-        for (let x = 0; x < canvas.width; x += 3) { // Decreased spacing for thicker text
+    for (let y = 0; y < canvas.height; y += 3) {
+        for (let x = 0; x < canvas.width; x += 3) {
             const index = (y * canvas.width + x) * 4;
             if (data[index + 3] > 128) {
                 positions.push({ x: x, y: y, color: getGradientColor(x, y) });
@@ -163,102 +163,47 @@ function animate() {
     if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        // Play the birthday song
-        playBirthdaySong();
+        birthdaySong.play().then(() => {
+            const messages = [
+                { text: "SORRY", delay: 5000 },
+                { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
+                { text: "ON YOUR SPECIAL DAY", delay: 15000 },
+                { text: "BUT", delay: 20000 },
+                { text: "I WILL TRY", delay: 25000 },
+                { text: "TO PUT A SMILE", delay: 30000 },
+                { text: "ON YOUR FACE", delay: 35000 },
+                { text: "BY BRINGING ALL THE", delay: 40000 },
+                { text: "THINGS YOU LIKE", delay: 45000 },
+                { text: "AT ONE PLACE", delay: 50000 },
+                { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
+            ];
 
-        // Define the messages and their timings
-        const messages = [
-            { text: "SORRY", delay: 5000 },
-            { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
-            
-            { text: "ON YOUR SPECIAL DAY", delay: 15000 },
-            { text: "BUT", delay: 20000 },
-            { text: "I WILL TRY", delay: 25000 },
-            { text: "TO PUT A SMILE", delay: 30000 },
-            { text: "ON YOUR FACE", delay: 35000 },
-            { text: "BY BRINGING ALL THE", delay: 40000 },
-            { text: "THINGS YOU LIKE", delay: 45000 },
-            { text: "AT ONE PLACE", delay: 50000 },
-            { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
-        ];
+            messages.forEach(({ text, delay }) => {
+                setTimeout(() => {
+                    const positions = getMessagePositions(text);
+                    assignTargetPositions(positions);
+                }, delay);
+            });
 
-        // Display each message at the defined times
-        messages.forEach(({ text, delay }) => {
             setTimeout(() => {
-                const positions = getMessagePositions(text);
-                assignTargetPositions(positions);
-            }, delay);
+                canvas.style.transition = 'opacity 2s';
+                content.style.transition = 'opacity 2s';
+                canvas.style.opacity = 0;
+                content.style.display = 'flex';
+                setTimeout(() => {
+                    content.style.opacity = 1;
+                    document.body.style.overflowY = 'scroll';
+                    canvas.style.display = 'none';
+                }, 2000);
+            }, 65000);
+        }).catch(error => {
+            console.error('Autoplay was prevented. Please interact with the page to start audio playback.', error);
         });
-
-        // Smooth transition from canvas to content
-        setTimeout(() => {
-            canvas.style.transition = 'opacity 2s';
-            content.style.transition = 'opacity 2s';
-            canvas.style.opacity = 0;
-            content.style.display = 'flex';
-            setTimeout(() => {
-                content.style.opacity = 1;
-                document.body.style.overflowY = 'scroll';
-                canvas.style.display = 'none';
-            }, 2000);
-        }, 65000); // Adjust this timing as needed
     }
 
     requestAnimationFrame(animate);
 }
 
-function playBirthdaySong() {
-    birthdaySong.play()
-        .then(() => {
-            console.log('Birthday song started playing.');
-        })
-        .catch(error => {
-            console.error('Failed to play birthday song:', error);
-        });
-}
-
-startButton.addEventListener('click', () => {
-    startButton.style.display = 'none';
-    createParticles();
-    animate();
-});
-
-// Ensure the birthday song is loaded before starting the animation
-birthdaySong.addEventListener('canplaythrough', () => {
-    console.log('Birthday song is ready to play.');
-});
-
-// Start the animation
-playBtn.addEventListener('click', () => {
-    playMusic();
-});
-
-pauseBtn.addEventListener('click', () => {
-    pauseMusic();
-});
-
-nextBtn.addEventListener('click', () => {
-    nextMusic();
-});
-
-prevBtn.addEventListener('click', () => {
-    prevMusic();
-});
-
-// Other audio player controls
-player.addEventListener('timeupdate', () => {
-    updateProgressBar();
-});
-
-progressBar.addEventListener('input', () => {
-    setProgress();
-});
-
-volumeControl.addEventListener('input', () => {
-    setVolume();
-});
-
-// Function definitions for audio control
 function playMusic() {
     player.play();
     playBtn.style.display = 'none';
@@ -305,3 +250,43 @@ function setProgress() {
 function setVolume() {
     player.volume = volumeControl.value;
 }
+
+startButton.addEventListener('click', () => {
+    startButton.style.display = 'none';
+    createParticles();
+    animate();
+});
+
+playBtn.addEventListener('click', () => {
+    playMusic();
+});
+
+pauseBtn.addEventListener('click', () => {
+    pauseMusic();
+});
+
+nextBtn.addEventListener('click', () => {
+    nextMusic();
+});
+
+prevBtn.addEventListener('click', () => {
+    prevMusic();
+});
+
+player.addEventListener('timeupdate', () => {
+    updateProgressBar();
+});
+
+progressBar.addEventListener('input', () => {
+    setProgress();
+});
+
+volumeControl.addEventListener('input', () => {
+    setVolume();
+});
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    createParticles();
+});
