@@ -48,6 +48,9 @@ body, html {
     opacity: 0;
     transition: opacity 2s;
     background-image: url(./img/photo.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    min-height: 100vh;
 }
 
 header, footer {
