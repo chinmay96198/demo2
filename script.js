@@ -24,8 +24,15 @@ let frame = 0;
 const durationRandomMotion = 500; // Increased duration for random motion
 const durationShapeFormation = 200;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+
 
 class Particle {
     constructor(x, y) {
@@ -299,5 +306,8 @@ volumeControl.addEventListener('input', () => {
 
 // Event listener to play birthday song when animation starts
 startButton.addEventListener('click', () => {
-    birthdaySong.play();
+    setTimeout(() => {
+        birthdaySong.play();
+    }, 9000);
+   
 });
