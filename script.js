@@ -174,8 +174,6 @@ function animate() {
     if (frame >= durationRandomMotion + durationShapeFormation && !animationStarted) {
         animationStarted = true;
 
-        // Play the birthday song
-      
         // Define the messages and their timings
         const messages = [
             { text: "I WISH YOU", delay: 5000 },
@@ -274,9 +272,17 @@ function setVolume() {
 // Event listener to play the birthday song
 startButton.addEventListener('click', () => {
     startButton.style.display = 'none';
+    birthdaySong.play(); // Play the birthday song on button click
     createParticles();
     animate();
 });
+
+// Additional click event listener to ensure music plays on mobile
+document.addEventListener('click', () => {
+    if (birthdaySong.paused) {
+        birthdaySong.play();
+    }
+}, { once: true });
 
 playBtn.addEventListener('click', () => {
     playMusic();
@@ -304,9 +310,4 @@ progressBar.addEventListener('input', () => {
 
 volumeControl.addEventListener('input', () => {
     setVolume();
-});
-
-// Event listener to play birthday song when animation starts
-startButton.addEventListener('click', () => {
-    birthdaySong.play();
 });
