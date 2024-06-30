@@ -11,8 +11,13 @@ const player = document.getElementById('player');
 const playerSource = document.getElementById('player-source');
 const progressBar = document.getElementById('progress');
 const volumeControl = document.getElementById('volume');
+const moviePlayer = document.getElementById('moviePlayer');
 
-const musicFiles = ["path/to/music1.mp3", "path/to/music2.mp3", "path/to/music3.mp3"];
+const musicFiles = [
+    "./music/music1.mp3",
+    "./music/music2.mp3",
+    "./music/music3.mp3"
+];
 let currentAudioIndex = 0;
 
 playerSource.src = musicFiles[currentAudioIndex];
@@ -31,8 +36,6 @@ function resizeCanvas() {
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-
-
 
 class Particle {
     constructor(x, y) {
@@ -309,5 +312,4 @@ startButton.addEventListener('click', () => {
     setTimeout(() => {
         birthdaySong.play();
     }, 9000);
-   
 });
