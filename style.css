@@ -66,7 +66,7 @@ section {
     text-align: center;
 }
 
-.music-player, .movie-player {
+.music-player {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -75,13 +75,11 @@ section {
     margin: 0 auto; /* Center align on mobile */
 }
 
-.music-player audio, .movie-player video {
+.music-player audio {
     width: 100%;
-    max-width: 600px;
-    height: auto;
 }
 
-.controls {
+.music-player .controls {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -89,7 +87,7 @@ section {
     margin-bottom: 10px;
 }
 
-.btn {
+.music-player .btn {
     padding: 10px;
     font-size: 24px;
     cursor: pointer;
@@ -105,23 +103,23 @@ section {
     height: 50px;
 }
 
-.btn:hover {
+.music-player .btn:hover {
     background: #666;
     transform: scale(1.1);
 }
 
-.progress-bar {
+.music-player .progress-bar {
     width: 100%;
     margin-bottom: 10px;
 }
 
-.volume-control {
+.music-player .volume-control {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.volume-control input {
+.music-player .volume-control input {
     width: 80%;
 }
 
@@ -145,21 +143,6 @@ section {
 }
 
 .places-gallery img:hover, .food-gallery img:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
-}
-
-.movie-player video {
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    border: 5px solid #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-}
-
-.movie-player video:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
 }
