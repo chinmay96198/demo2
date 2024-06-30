@@ -109,7 +109,7 @@ function getCakeAndTextPositions() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = 'white';
-    ctx.fillText("Happy 25th Birthday Melis", centerX, centerY - cakeHeight - 60);
+    ctx.fillText("Happy Birthday Melis", centerX, centerY - cakeHeight - 60);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
@@ -174,8 +174,7 @@ function animate() {
         animationStarted = true;
 
         // Play the birthday song
-        birthdaySong.play();
-
+      
         // Define the messages and their timings
         const messages = [
             { text: "SORRY", delay: 5000 },
