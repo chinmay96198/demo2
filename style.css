@@ -47,18 +47,15 @@ body, html {
     box-sizing: border-box;
     opacity: 0;
     transition: opacity 2s;
+    background-image: url(./img/photo.jpg);
 }
 
 header, footer {
     width: 100%;
     text-align: center;
     padding: 20px;
+   
     background: #222;
-    border-bottom: 2px solid #b22222;
-}
-
-footer {
-    border-top: 2px solid #b22222;
 }
 
 section {
@@ -69,9 +66,14 @@ section {
 .music-player {
     display: flex;
     flex-direction: column;
+    background-color: rgb(187, 77, 96);
+    opacity: 0.8;
+    border-radius: 500px;
+    
     justify-content: center;
     align-items: center;
     max-width: 80%;
+    height: 60%;
     margin: 0 auto; /* Center align on mobile */
 }
 
@@ -89,7 +91,8 @@ section {
 
 .music-player .btn {
     padding: 10px;
-    font-size: 24px;
+    
+    font-size: 15px;
     cursor: pointer;
     background: #444;
     color: #fff;
@@ -100,7 +103,7 @@ section {
     justify-content: center;
     align-items: center;
     width: 50px;
-    height: 50px;
+    height: 45px;
 }
 
 .music-player .btn:hover {
@@ -125,16 +128,17 @@ section {
 
 .places-gallery, .food-gallery {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
     padding: 10px;
+    width: 100%; /* Ensure full width for column direction */
 }
 
 .places-gallery img, .food-gallery img {
-    width: calc(50% - 10px); /* Two images per row on mobile */
-    max-width: 200px;
-    height: 200px;
+    width: 50%; /* Full width for column direction */
+    max-width: 600px; /* Limit the max-width */
+    height: auto;
     object-fit: cover;
     border: 5px solid #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -150,4 +154,11 @@ section {
 footer p {
     margin: 0;
     font-size: 14px;
+}
+
+h2 {
+    background-color: gray;
+    color: black;
+    width: 100vw;
+    opacity: 0.8;
 }

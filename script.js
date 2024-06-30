@@ -14,9 +14,9 @@ const volumeControl = document.getElementById('volume');
 const moviePlayer = document.getElementById('moviePlayer');
 
 const musicFiles = [
-    "./music/music1.mp3",
-    "./music/music2.mp3",
-    "./music/music3.mp3"
+    "./music/Ariana Grande - 7 rings (Official Video) (320).mp3",
+    "./music/Dua Lipa - New Rules (Official Music Video) (320).mp3",
+    "./music/Taylor Swift - Shake It Off (320).mp3"
 ];
 let currentAudioIndex = 0;
 
@@ -109,7 +109,8 @@ function getCakeAndTextPositions() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = 'white';
-    ctx.fillText("Happy Birthday Melis", centerX, centerY - cakeHeight - 60);
+    ctx.fillText("Happy Birthday", centerX, centerY - cakeHeight - 60);
+    ctx.fillText(" Melis", centerX, centerY - cakeHeight - 20);
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
@@ -177,17 +178,16 @@ function animate() {
       
         // Define the messages and their timings
         const messages = [
-            { text: "SORRY", delay: 5000 },
-            { text: "I CANT GIVE YOU ANYTHING", delay: 10000 },
-            { text: "ON YOUR SPECIAL DAY", delay: 15000 },
-            { text: "BUT", delay: 20000 },
-            { text: "I WILL TRY", delay: 25000 },
-            { text: "TO PUT A SMILE", delay: 30000 },
-            { text: "ON YOUR FACE", delay: 35000 },
-            { text: "BY BRINGING ALL THE", delay: 40000 },
-            { text: "THINGS YOU LIKE", delay: 45000 },
-            { text: "AT ONE PLACE", delay: 50000 },
-            { text: "HOPE YOU LIKE IT !!!!", delay: 55000 }
+            { text: "I WISH YOU", delay: 5000 },
+            { text: "ALL THE HAPPINESS", delay: 10000 },
+            { text: "IN THE WORLD", delay: 15000 },
+            { text: "ON THIS", delay: 20000 },
+            { text: "SPECIAL DAY", delay: 25000 },
+            { text: "I WILL TRY", delay: 30000 },
+            { text: "TO BRING A", delay: 35000 },
+            { text: "A SMILE", delay: 40000 },
+            { text: "ON YOUR FACE", delay: 45000 },
+            { text: "HOPE YOU LIKE IT !!!!", delay: 50000 }
         ];
 
         // Display each message at the defined times
