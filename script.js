@@ -308,7 +308,5 @@ volumeControl.addEventListener('input', () => {
 
 // Event listener to play birthday song when animation starts
 startButton.addEventListener('click', () => {
-    setTimeout(() => {
-        birthdaySong.play();
-    }, 9000);
+    birthdaySong.play();
 });
